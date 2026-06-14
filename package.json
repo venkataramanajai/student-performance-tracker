@@ -1,0 +1,26 @@
+{
+  "name": "student-performance-tracker",
+  "version": "1.0.0",
+  "description": "A comprehensive end-to-end Student Performance Tracker application for internships.",
+  "main": "server/server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "node --watch server/server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "morgan": "^1.10.0",
+    "sqlite3": "^5.1.7"
+  },
+  "keywords": [
+    "student-performance",
+    "tracker",
+    "internship",
+    "express",
+    "sqlite"
+  ],
+  "author": "",
+  "license": "ISC"
+}

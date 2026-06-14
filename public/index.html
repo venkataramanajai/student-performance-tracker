@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Performance Tracker - Dashboard</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark-theme">
+
+  <!-- ========================================== -->
+  <!-- LANDING / SPLASH SCREEN                    -->
+  <!-- ========================================== -->
+  <div id="landing-screen" class="landing-screen">
+
+    <!-- Animated background orbs -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="orb orb-4"></div>
+
+    <!-- Grid overlay texture -->
+    <div class="landing-grid"></div>
+
+    <div class="landing-content">
+
+      <!-- Logo + Brand -->
+      <div class="landing-brand">
+        <div class="landing-logo-wrap">
+          <i class="fa-solid fa-graduation-cap landing-logo-icon"></i>
+          <div class="landing-logo-ring"></div>
+        </div>
+        <h1 class="landing-title">EduPulse</h1>
+        <p class="landing-tagline">MCA Student Performance Tracker</p>
+      </div>
+
+      <!-- Description -->
+      <p class="landing-description">
+        A smart academic dashboard to track grades, attendance,<br>
+        and performance analytics for MCA students — all in one place.
+      </p>
+
+      <!-- Feature Highlights -->
+      <div class="landing-features">
+        <div class="feature-pill">
+          <i class="fa-solid fa-chart-line"></i>
+          <span>Live Analytics</span>
+        </div>
+        <div class="feature-pill">
+          <i class="fa-solid fa-calendar-check"></i>
+          <span>Attendance Tracking</span>
+        </div>
+        <div class="feature-pill">
+          <i class="fa-solid fa-file-pen"></i>
+          <span>Grades Management</span>
+        </div>
+        <div class="feature-pill">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          <span>Risk Alerts</span>
+        </div>
+      </div>
+
+      <!-- CTA Button -->
+      <button id="btn-start" class="btn-start" onclick="launchApp()">
+        <span class="btn-start-text">
+          <i class="fa-solid fa-rocket"></i>
+          Get Started
+        </span>
+        <span class="btn-start-glow"></span>
+      </button>
+
+      <!-- Student count badge -->
+      <p class="landing-footer-note">
+        <i class="fa-solid fa-users"></i> Tracking <strong>6 MCA Students</strong> across Sem-I &amp; Sem-II
+      </p>
+
+    </div>
+  </div>
+
+  <!-- Main Container (hidden until launched) -->
+  <div class="app-container" id="app-container" style="display:none;">
+    
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="brand">
+        <i class="fa-solid fa-graduation-cap logo-icon"></i>
+        <h2>EduPulse</h2>
+      </div>
+      
+      <nav class="nav-menu">
+        <a href="#" class="nav-item active" data-tab="dashboard">
+          <i class="fa-solid fa-chart-line"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="#" class="nav-item" data-tab="students">
+          <i class="fa-solid fa-user-graduate"></i>
+          <span>Students</span>
+        </a>
+        <a href="#" class="nav-item" data-tab="marks">
+          <i class="fa-solid fa-file-pen"></i>
+          <span>Grades Entry</span>
+        </a>
+        <a href="#" class="nav-item" data-tab="attendance">
+          <i class="fa-solid fa-calendar-check"></i>
+          <span>Attendance</span>
+        </a>
+        <a href="#" class="nav-item" data-tab="reports">
+          <i class="fa-solid fa-file-invoice-amount"></i>
+          <span>Reports</span>
+        </a>
+      </nav>
+      
+      <div class="sidebar-footer">
+        <div class="user-profile">
+          <div class="avatar">
+            <i class="fa-solid fa-user-tie"></i>
+          </div>
+          <div class="user-info">
+            <h4>Faculty Portal</h4>
+            <p>Admin Dashboard</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      
+      <!-- Top Header -->
+      <header class="top-header">
+        <div class="header-title">
+          <h1 id="page-title">Dashboard</h1>
+          <p class="subtitle" id="page-subtitle">Track academic metrics and student attendance trends</p>
+        </div>
+        <div class="header-actions">
+          <span id="current-time" class="time-display"><i class="fa-regular fa-clock"></i> Loading...</span>
+          <button id="btn-refresh" class="btn btn-secondary">
+            <i class="fa-solid fa-rotate"></i> Refresh
+          </button>
+          <button id="btn-quick-add" class="btn btn-primary">
+            <i class="fa-solid fa-plus"></i> Add Student
+          </button>
+        </div>
+      </header>
+
+      <!-- Scrollable Content -->
+      <div class="content-body">
+        
+        <!-- ========================================== -->
+        <!-- TAB 1: DASHBOARD -->
+        <!-- ========================================== -->
+        <section id="tab-dashboard" class="tab-pane active">
+          
+          <!-- Summary Cards Grid -->
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="card-icon blue-glow">
+                <i class="fa-solid fa-users"></i>
+              </div>
+              <div class="card-details">
+                <h3>Total Students</h3>
+                <h2 id="stat-total-students">-</h2>
+                <span class="card-trend text-muted">Active Enrolled</span>
+              </div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="card-icon green-glow">
+                <i class="fa-solid fa-award"></i>
+              </div>
+              <div class="card-details">
+                <h3>Class Average</h3>
+                <h2 id="stat-class-average">-</h2>
+                <span class="card-trend text-success"><i class="fa-solid fa-chart-simple"></i> Target: 75%</span>
+              </div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="card-icon purple-glow">
+                <i class="fa-solid fa-clipboard-user"></i>
+              </div>
+              <div class="card-details">
+                <h3>Attendance Rate</h3>
+                <h2 id="stat-attendance-rate">-</h2>
+                <span class="card-trend text-info" id="stat-attendance-change"><i class="fa-solid fa-clock"></i> Target: 75%</span>
+              </div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="card-icon gold-glow">
+                <i class="fa-solid fa-crown"></i>
+              </div>
+              <div class="card-details">
+                <h3>Top Performer</h3>
+                <h2 id="stat-top-student" class="truncate">-</h2>
+                <span class="card-trend text-warning" id="stat-top-student-score">-</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Charts Area -->
+          <div class="charts-grid">
+            <div class="chart-card">
+              <h3>Subject Averages</h3>
+              <div class="chart-container">
+                <canvas id="chart-subject-averages"></canvas>
+              </div>
+            </div>
+            
+            <div class="chart-card">
+              <h3>Attendance Trends (Last 15 Days)</h3>
+              <div class="chart-container">
+                <canvas id="chart-attendance-trends"></canvas>
+              </div>
+            </div>
+            
+            <div class="chart-card">
+              <h3>Grade Distribution</h3>
+              <div class="chart-container">
+                <canvas id="chart-grade-distribution"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Risk Analysis Panel -->
+          <div class="risk-section">
+            <div class="section-header">
+              <h2><i class="fa-solid fa-triangle-exclamation text-danger"></i> Risk & Performance Alerts</h2>
+              <span class="badge badge-danger" id="risk-badge">0 Students At Risk</span>
+            </div>
+            <div class="risk-grid" id="risk-cards-container">
+              <!-- Risk Cards rendered dynamically -->
+              <p class="text-muted empty-state">Calculating risks...</p>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- ========================================== -->
+        <!-- TAB 2: STUDENTS -->
+        <!-- ========================================== -->
+        <section id="tab-students" class="tab-pane">
+          <div class="actions-bar">
+            <div class="search-box">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="text" id="search-student" placeholder="Search by name or roll number...">
+            </div>
+            <div class="filter-box">
+              <select id="filter-class">
+                <option value="">All Classes</option>
+                <option value="MCA Sem-I">MCA Sem-I</option>
+                <option value="MCA Sem-II">MCA Sem-II</option>
+              </select>
+            </div>
+            <button id="btn-add-student" class="btn btn-primary">
+              <i class="fa-solid fa-user-plus"></i> Add New Student
+            </button>
+          </div>
+
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Roll No</th>
+                  <th>Name</th>
+                  <th>Class</th>
+                  <th>Email</th>
+                  <th>Avg Score</th>
+                  <th>Attendance %</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="students-table-body">
+                <tr>
+                  <td colspan="7" class="text-center">Loading students list...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- TAB 3: GRADES ENTRY -->
+        <!-- ========================================== -->
+        <section id="tab-marks" class="tab-pane">
+          <div class="grades-entry-container">
+            <div class="entry-card form-card">
+              <h3><i class="fa-solid fa-file-signature"></i> Enter Student Marks</h3>
+              <form id="marks-form" class="responsive-form">
+                <div class="form-group">
+                  <label for="marks-student-id">Select Student</label>
+                  <select id="marks-student-id" required>
+                    <option value="">-- Choose Student --</option>
+                  </select>
+                </div>
+                
+                <div class="form-group">
+                  <label for="marks-subject">Subject</label>
+                  <select id="marks-subject" required>
+                    <option value="">-- Select Subject --</option>
+                    <option value="Data Structures">Data Structures</option>
+                    <option value="Database Systems">Database Systems</option>
+                    <option value="Java Programming">Java Programming</option>
+                    <option value="Web Technologies">Web Technologies</option>
+                    <option value="Software Engineering">Software Engineering</option>
+                  </select>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="marks-exam-type">Exam Type</label>
+                    <select id="marks-exam-type" required>
+                      <option value="Mid-term">Mid-term</option>
+                      <option value="Final">Final</option>
+                    </select>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="marks-score">Score (Marks)</label>
+                    <input type="number" id="marks-score" min="0" max="100" placeholder="e.g. 85" required>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="marks-max-score">Max Score</label>
+                    <input type="number" id="marks-max-score" value="100" readonly>
+                  </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">
+                  <i class="fa-solid fa-save"></i> Save Grades
+                </button>
+              </form>
+            </div>
+
+            <div class="entry-card table-card">
+              <h3><i class="fa-solid fa-history"></i> Recent Grades Logs</h3>
+              <div class="table-container small-table">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Roll No</th>
+                      <th>Name</th>
+                      <th>Subject</th>
+                      <th>Exam</th>
+                      <th>Score</th>
+                    </tr>
+                  </thead>
+                  <tbody id="recent-marks-body">
+                    <tr>
+                      <td colspan="5" class="text-center">Loading grades history...</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- TAB 4: ATTENDANCE -->
+        <!-- ========================================== -->
+        <section id="tab-attendance" class="tab-pane">
+          <div class="attendance-controls">
+            <div class="date-picker-container">
+              <label for="attendance-date"><i class="fa-solid fa-calendar"></i> Select Date:</label>
+              <input type="date" id="attendance-date" required>
+            </div>
+            <div class="attendance-summary">
+              <span id="att-summary-present" class="summary-badge present"><i class="fa-solid fa-circle-check"></i> Present: 0</span>
+              <span id="att-summary-late" class="summary-badge late"><i class="fa-solid fa-clock"></i> Late: 0</span>
+              <span id="att-summary-absent" class="summary-badge absent"><i class="fa-solid fa-circle-xmark"></i> Absent: 0</span>
+            </div>
+          </div>
+
+          <div class="table-container">
+            <table class="data-table" id="attendance-table">
+              <thead>
+                <tr>
+                  <th>Roll No</th>
+                  <th>Name</th>
+                  <th>Class</th>
+                  <th class="text-center">Attendance Status</th>
+                </tr>
+              </thead>
+              <tbody id="attendance-table-body">
+                <tr>
+                  <td colspan="4" class="text-center">Select a date to fetch students...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          <div class="bottom-actions">
+            <button id="btn-save-attendance" class="btn btn-primary">
+              <i class="fa-solid fa-clipboard-check"></i> Save Daily Attendance
+            </button>
+          </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- TAB 5: REPORTS -->
+        <!-- ========================================== -->
+        <section id="tab-reports" class="tab-pane">
+          <div class="reports-header-bar">
+            <div class="report-filters">
+              <p class="text-muted"><i class="fa-solid fa-circle-info"></i> View academic grids and export report cards</p>
+            </div>
+            <div class="report-actions">
+              <button id="btn-export-csv" class="btn btn-secondary">
+                <i class="fa-solid fa-file-csv"></i> Export CSV
+              </button>
+              <button id="btn-print-report" class="btn btn-primary">
+                <i class="fa-solid fa-print"></i> Print Report Cards
+              </button>
+            </div>
+          </div>
+
+          <div class="table-container report-table-wrapper">
+            <table class="data-table report-table">
+              <thead>
+                <tr>
+                  <th rowspan="2">Rank</th>
+                  <th rowspan="2">Roll No</th>
+                  <th rowspan="2">Student Name</th>
+                  <th colspan="2">DSA</th>
+                  <th colspan="2">DBMS</th>
+                  <th colspan="2">Java</th>
+                  <th colspan="2">Web Tech</th>
+                  <th colspan="2">SE</th>
+                  <th rowspan="2">Avg %</th>
+                  <th rowspan="2">Attendance</th>
+                </tr>
+                <tr>
+                  <th>Mid</th>
+                  <th>Fin</th>
+                  <th>Mid</th>
+                  <th>Fin</th>
+                  <th>Mid</th>
+                  <th>Fin</th>
+                  <th>Mid</th>
+                  <th>Fin</th>
+                  <th>Mid</th>
+                  <th>Fin</th>
+                </tr>
+              </thead>
+              <tbody id="reports-table-body">
+                <tr>
+                  <td colspan="15" class="text-center">Generating consolidated reports...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL: ADD/EDIT STUDENT -->
+  <!-- ========================================== -->
+  <div id="student-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="student-modal-title">Add Student</h2>
+        <span class="close-btn" id="close-student-modal">&times;</span>
+      </div>
+      <form id="student-form">
+        <input type="hidden" id="student-id">
+        <div class="form-group">
+          <label for="student-name">Full Name</label>
+          <input type="text" id="student-name" placeholder="e.g. John Doe" required>
+        </div>
+        <div class="form-group">
+          <label for="student-roll">Roll Number</label>
+          <input type="text" id="student-roll" placeholder="e.g. 25M11MC007" required pattern="25M11MC\d{3}" title="Format: 25M11MC followed by 3 digits (e.g. 25M11MC007)">
+
+        </div>
+        <div class="form-group">
+          <label for="student-email">Email Address</label>
+          <input type="email" id="student-email" placeholder="e.g. john@example.com" required>
+        </div>
+        <div class="form-group">
+          <label for="student-class">Class/Batch</label>
+          <select id="student-class" required>
+            <option value="MCA Sem-I">MCA Sem-I</option>
+            <option value="MCA Sem-II">MCA Sem-II</option>
+          </select>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="btn-cancel-student">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Student</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL: VIEW STUDENT PROFILE -->
+  <!-- ========================================== -->
+  <div id="profile-modal" class="modal">
+    <div class="modal-content large-modal">
+      <div class="modal-header">
+        <h2>Student Profile Detail</h2>
+        <span class="close-btn" id="close-profile-modal">&times;</span>
+      </div>
+      
+      <div class="profile-layout">
+        <!-- Sidebar profile details -->
+        <div class="profile-card-sidebar">
+          <div class="profile-avatar">
+            <i class="fa-solid fa-graduation-cap"></i>
+          </div>
+          <h2 id="prof-name">Student Name</h2>
+          <p id="prof-roll" class="roll-badge">25M11MC001</p>
+          <hr class="divider">
+          
+          <div class="prof-meta">
+            <p><strong><i class="fa-regular fa-envelope"></i> Email:</strong> <span id="prof-email">-</span></p>
+            <p><strong><i class="fa-solid fa-school"></i> Class:</strong> <span id="prof-class">-</span></p>
+          </div>
+          
+          <div class="profile-metrics">
+            <div class="metric-box">
+              <span class="metric-label">GPA Score</span>
+              <span class="metric-val" id="prof-gpa">-</span>
+            </div>
+            <div class="metric-box">
+              <span class="metric-label">Attendance</span>
+              <span class="metric-val" id="prof-att">-</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Main profile details (Grades and Logs) -->
+        <div class="profile-details-main">
+          <div class="profile-tabs">
+            <button class="profile-tab-btn active" data-profile-tab="prof-grades">Grades Sheet</button>
+            <button class="profile-tab-btn" data-profile-tab="prof-attendance">Attendance Log</button>
+          </div>
+          
+          <div class="profile-tab-content active" id="prof-grades-tab">
+            <table class="data-table border-table">
+              <thead>
+                <tr>
+                  <th>Subject</th>
+                  <th>Exam Type</th>
+                  <th>Score</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="prof-grades-table-body">
+                <!-- Loaded dynamically -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="profile-tab-content" id="prof-attendance-tab">
+            <div class="attendance-grid-log" id="prof-attendance-log-container">
+              <!-- Loaded dynamically -->
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="btn-close-profile">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Custom client JS script -->
+  <script src="app.js"></script>
+</body>
+</html>
