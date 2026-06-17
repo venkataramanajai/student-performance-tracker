@@ -635,12 +635,11 @@ The database seeds **6 pre-configured MCA students** on first launch:
 
 ## 👨‍💻 Developer
 
-### M. Phaneendra Sriramu
-
+# **NAME:** M. VENKATA RAMANA
 🎓 **Degree:** Master of Computer Applications (MCA)  
 🏫 **University:** Aditya University, Surampalem  
 📅 **Batch:** 2025 – 2027  
-🪪 **Roll Number:** 25M11MC093  
+🪪 **Roll Number:** 25M11MC089
 
 ### 💼 About This Project
 
